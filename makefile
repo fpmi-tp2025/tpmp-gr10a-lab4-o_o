@@ -1,21 +1,26 @@
 CXX = g++
-CXXFLAGS = -std=c++17 -Wall -Wextra -Iincludes
-LDFLAGS = -lsqlite3
+CXXFLAGS = -std=c++17 -Wall -Wextra -Iincludes -lsqlite3
 
-SRC = $(wildcard src/*.cpp)
-OBJ = $(SRC:.cpp=.o)
-EXEC = bin/helicopter_transport
+TARGET = helicopter_transport
 
-all: $(EXEC)
+SRCDIR = src
+BUILDDIR = build
+BINDIR = bin
 
-$(EXEC): $(OBJ)
-  $(CXX) $(CXXFLAGS) $(OBJ) -o $@ $(LDFLAGS)
+SOURCES = $(wildcard $(SRCDIR)/*.cpp)
+OBJECTS = $(patsubst $(SRCDIR)/%.cpp,$(BUILDDIR)/%.o,$(SOURCES))
 
-%.o: %.cpp
+all: $(BINDIR)/$(TARGET)
+
+$(BINDIR)/$(TARGET): $(OBJECTS)
+  @mkdir -p $(BINDIR)
+  $(CXX) $(CXXFLAGS) -o $@ $^ -lsqlite3
+
+$(BUILDDIR)/%.o: $(SRCDIR)/%.cpp
+  @mkdir -p $(BUILDDIR)
   $(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
-  rm -f $(OBJ) $(EXEC)
+  rm -rf $(BUILDDIR) $(BINDIR)
 
-run: $(EXEC)
-    ./$(EXEC)
+.PHONY: all clean check test
