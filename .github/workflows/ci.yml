@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libsqlite3-dev
+
+    - name: Clean previous builds
+      run: |
+        if [ -f Makefile ]; then make clean; fi
+        rm -rf bin/*
+        mkdir -p bin
+
+    - name: Build with Make
+      run: |
+        make
+
+    - name: Run project
+      run: |
+        ./bin/helicopter_transport
