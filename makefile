@@ -13,14 +13,14 @@ OBJECTS = $(patsubst $(SRCDIR)/%.cpp,$(BUILDDIR)/%.o,$(SOURCES))
 all: $(BINDIR)/$(TARGET)
 
 $(BINDIR)/$(TARGET): $(OBJECTS)
-  @mkdir -p $(BINDIR)
-  $(CXX) $(CXXFLAGS) -o $@ $^ -lsqlite3
+	@mkdir -p $(BINDIR)
+	$(CXX) $(CXXFLAGS) -o $@ $^ -lsqlite3
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.cpp
-  @mkdir -p $(BUILDDIR)
-  $(CXX) $(CXXFLAGS) -c $< -o $@
+	@mkdir -p $(BUILDDIR)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
-  rm -rf $(BUILDDIR) $(BINDIR)
+	rm -rf $(BUILDDIR) $(BINDIR)
 
 .PHONY: all clean check test
